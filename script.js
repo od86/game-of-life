@@ -1,6 +1,7 @@
 const board = document.querySelector('.board');
-const playButton = document.querySelector('.play-btn')
+const playButton = document.querySelector('.play-btn');
 const stopButton = document.querySelector('.stop-btn');
+const needToChange = [];
 
 let allowedSquarePick = true;
 let gamePlaying = false;
@@ -34,10 +35,8 @@ function selectSquare(square) {
 
 create_board();
 
-
-
 playButton.addEventListener('click', () => {
-  let gameOfLifeLoop = setInterval(gameOfLife, 5000);
+  let gameOfLifeLoop = setInterval(gameOfLife, 500);
   stopButton.addEventListener('click', () => {
     setTimeout(() => { clearInterval(gameOfLifeLoop); }, 500); 
   })
@@ -51,13 +50,27 @@ function gameOfLife() {
       aliveOrDead(document.querySelector(`#x${fixCoord(x)}-y${fixCoord(y)}`)); 
     }
   }
+
+  addChanges();
+  console.log('iteration')
 }
 
-// x00-y00
+function addChanges() {
+  needToChange.forEach(item => {
+    item[0] == "alive" ? item[1].classList.add('alive') : item[1].classList.remove('alive')
+  });
+}
+
 function aliveOrDead(square) {
   let squareId = square.id.split('');
   let squareState = square.classList[1] == "alive" ? true : false // Alive is true, dead is false
   let neighbors = numOfNeighbors(squareId);
+
+  if (squareState == true && (neighbors < 2 || neighbors > 3)) { 
+    needToChange.push(["dead", square])
+  } else if ((squareState == true && (neighbors == 2 || neighbors == 3)) || (squareState == false && neighbors == 3)) { 
+    needToChange.push(["alive", square])
+  }
 }
 
 function numOfNeighbors(squareId) {
@@ -110,8 +123,3 @@ function numOfNeighbors(squareId) {
 
   return aliveNeighbors;
 }
-
-// Live cell: < 2 neighbors = dies
-// Live cell: 2 || 3 neighbors = survives
-// Live cell: > 3 neighbors = dies
-// Dead cell: == 3 neighbors = survives

@@ -70,3 +70,7 @@ body {
   flex: 1;
   background-color: rgb(105, 105, 105);
 }
+
+div.alive {
+  background-color: red;
+}

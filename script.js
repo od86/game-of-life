@@ -1,16 +1,18 @@
 const board = document.querySelector('.board');
 const playPauseButton = document.querySelector('.play-pause-btn');
+const iterationCount = document.querySelector('.iteration-count');
 let allowedSquarePick = true;
 let playOrPause = true; // play = true, pause = false
+let iterationCounter = 0;
 const needToChange = [];
 
 function create_board() {
-  for (let x = 0; x < 50; x++) {
+  for (let x = 0; x < 60; x++) {
     row = document.createElement('div');
     row.classList.add('row');
     board.appendChild(row);
 
-    for (let y = 0; y < 50; y++) {
+    for (let y = 0; y < 60; y++) {
       let square = document.createElement('div');
       square.classList.add('square');
       square.id = `x${fixCoord(x)}-y${fixCoord(y)}`
@@ -43,28 +45,24 @@ playPauseButton.addEventListener('click', () => {
     allowedSquarePick = true;
   }
 
-  changeButtonText();
+  playPauseButton.innerText = playOrPause == true ? "Play" : "Pause";
 });
 
 function gameOfLife() {
-  for (let x = 0; x < 50; x++) {
-    for (let y = 0; y < 50; y++) { 
+  for (let x = 0; x < 60; x++) {
+    for (let y = 0; y < 60; y++) { 
       aliveOrDead(document.querySelector(`#x${fixCoord(x)}-y${fixCoord(y)}`)); 
     }
   }
 
   addChanges();
-  console.log('iteration')
+  iterationCount.innerText = (iterationCounter += 1);
 }
 
 function addChanges() {
   needToChange.forEach(item => {
     item[0] == "alive" ? item[1].classList.add('alive') : item[1].classList.remove('alive')
   });
-}
-
-function changeButtonText() {
-  playPauseButton.innerText = playOrPause == true ? "Play" : "Pause";
 }
 
 function aliveOrDead(square) {

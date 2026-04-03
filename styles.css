@@ -40,13 +40,29 @@ body {
   font-size: 2.8em;
 }
 
-.sidebar > button:hover {
+.sidebar > button:hover,
+.reset-btn {
   text-decoration: underline;
   cursor: pointer;
 }
 
+.sidebar > div:nth-child(3) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
 .sidebar > div {
   font-size: 1.2rem;
+}
+
+.reset-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: white;
+  text-decoration: underline;
 }
 
 .board-container {

@@ -1,11 +1,13 @@
 const board = document.querySelector('.board');
 const playPauseButton = document.querySelector('.play-pause-btn');
 const iterationCount = document.querySelector('.iteration-count');
+const resetButton = document.querySelector('.reset-btn')
 let allowedSquarePick = true;
 let playOrPause = true; // play = true, pause = false
 let iterationCounter = 0;
 const needToChange = [];
 
+// Creates the board
 function create_board() {
   for (let x = 0; x < 50; x++) {
     row = document.createElement('div');
@@ -23,10 +25,12 @@ function create_board() {
   }
 }
 
+// Fix coords by adding a zero in front of single numbers
 function fixCoord(coord) { 
   return coord < 10 ? `0${coord}` : coord
 }
 
+// Lets users pick squares
 function selectSquare(square) {
   if (allowedSquarePick == false) { return; }
   square.classList.toggle('alive')
@@ -34,6 +38,7 @@ function selectSquare(square) {
 
 create_board();
 
+// Starts interval when play button is clicked
 playPauseButton.addEventListener('click', () => {
   if (playOrPause == true) {
     gameOfLifeLoop = setInterval(gameOfLife, 500);
@@ -48,6 +53,7 @@ playPauseButton.addEventListener('click', () => {
   playPauseButton.innerText = playOrPause == true ? "Play" : "Pause";
 });
 
+// Game of life loop function
 function gameOfLife() {
   for (let x = 0; x < 50; x++) {
     for (let y = 0; y < 50; y++) { 
@@ -59,12 +65,14 @@ function gameOfLife() {
   iterationCount.innerText = (iterationCounter += 1);
 }
 
+// Change squares to their new color
 function addChanges() {
   needToChange.forEach(item => {
     item[0] == "alive" ? item[1].classList.add('alive') : item[1].classList.remove('alive')
   });
 }
 
+// Checks if square is alive or dead
 function aliveOrDead(square) {
   let squareId = square.id.split('');
   let squareState = square.classList[1] == "alive" ? true : false // Alive is true, dead is false
@@ -77,6 +85,7 @@ function aliveOrDead(square) {
   }
 }
 
+// Calculate number of neighbors a square has
 function numOfNeighbors(squareId) {
   let xCoord = parseInt(`${squareId[1]}${squareId[2]}`);
   let yCoord = parseInt(`${squareId[5]}${squareId[6]}`);
@@ -127,3 +136,9 @@ function numOfNeighbors(squareId) {
 
   return aliveNeighbors;
 }
+
+resetButton.addEventListener('click', () => {
+  board.innerHTML = null
+  create_board();
+  iterationCount.innerText = (iterationCounter = 0);
+});

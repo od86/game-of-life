@@ -7,12 +7,12 @@ let iterationCounter = 0;
 const needToChange = [];
 
 function create_board() {
-  for (let x = 0; x < 60; x++) {
+  for (let x = 0; x < 50; x++) {
     row = document.createElement('div');
     row.classList.add('row');
     board.appendChild(row);
 
-    for (let y = 0; y < 60; y++) {
+    for (let y = 0; y < 50; y++) {
       let square = document.createElement('div');
       square.classList.add('square');
       square.id = `x${fixCoord(x)}-y${fixCoord(y)}`
@@ -49,8 +49,8 @@ playPauseButton.addEventListener('click', () => {
 });
 
 function gameOfLife() {
-  for (let x = 0; x < 60; x++) {
-    for (let y = 0; y < 60; y++) { 
+  for (let x = 0; x < 50; x++) {
+    for (let y = 0; y < 50; y++) { 
       aliveOrDead(document.querySelector(`#x${fixCoord(x)}-y${fixCoord(y)}`)); 
     }
   }

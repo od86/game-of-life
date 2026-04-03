@@ -1,10 +1,8 @@
 const board = document.querySelector('.board');
-const playButton = document.querySelector('.play-btn');
-const stopButton = document.querySelector('.stop-btn');
-const needToChange = [];
-
+const playPauseButton = document.querySelector('.play-pause-btn');
 let allowedSquarePick = true;
-let gamePlaying = false;
+let playOrPause = true; // play = true, pause = false
+const needToChange = [];
 
 function create_board() {
   for (let x = 0; x < 50; x++) {
@@ -29,22 +27,26 @@ function fixCoord(coord) {
 
 function selectSquare(square) {
   if (allowedSquarePick == false) { return; }
-
   square.classList.toggle('alive')
 }
 
 create_board();
 
-playButton.addEventListener('click', () => {
-  let gameOfLifeLoop = setInterval(gameOfLife, 500);
-  stopButton.addEventListener('click', () => {
-    setTimeout(() => { clearInterval(gameOfLifeLoop); }, 500); 
-  })
+playPauseButton.addEventListener('click', () => {
+  if (playOrPause == true) {
+    gameOfLifeLoop = setInterval(gameOfLife, 500);
+    playOrPause = false;
+    allowedSquarePick = false;
+  } else {
+    setTimeout(() => { clearInterval(gameOfLifeLoop); }, 1);
+    playOrPause = true;
+    allowedSquarePick = true;
+  }
+
+  changeButtonText();
 });
 
 function gameOfLife() {
-  allowedSquarePick = false;
-
   for (let x = 0; x < 50; x++) {
     for (let y = 0; y < 50; y++) { 
       aliveOrDead(document.querySelector(`#x${fixCoord(x)}-y${fixCoord(y)}`)); 
@@ -59,6 +61,10 @@ function addChanges() {
   needToChange.forEach(item => {
     item[0] == "alive" ? item[1].classList.add('alive') : item[1].classList.remove('alive')
   });
+}
+
+function changeButtonText() {
+  playPauseButton.innerText = playOrPause == true ? "Play" : "Pause";
 }
 
 function aliveOrDead(square) {
